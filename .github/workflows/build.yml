@@ -17,8 +17,8 @@ jobs:
       - uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: \${{ github.actor }}
-          password: \${{ secrets.GITHUB_TOKEN }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v6
         with:
           context: .
@@ -26,4 +26,4 @@ jobs:
           platforms: linux/amd64
           tags: |
             ghcr.io/skender18/opencode-node:latest
-            ghcr.io/skender18/opencode-node:sha-\${{ github.sha }}
+            ghcr.io/skender18/opencode-node:sha-${{ github.sha }}
