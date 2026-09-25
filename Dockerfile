@@ -1,6 +1,6 @@
 FROM node:22-bookworm-slim
 
-ARG OPENCODE_VERSION=1.18.32
+ARG OPENCODE_VERSION=2.0.16
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
@@ -14,11 +14,12 @@ RUN apt-get update \
       build-essential \
  && rm -rf /var/lib/apt/lists/*
 
-RUN curl -fsSL "https://github.com/anomalyco/opencode/releases/download/v${OPENCODE_VERSION}/opencode-linux-x64.tar.gz" \
-      -o /tmp/opencode.tar.gz \
- && tar -xzf /tmp/opencode.tar.gz -C /usr/local/bin \
- && chmod +x /usr/local/bin/opencode \
- && rm /tmp/opencode.tar.gz \
+# OpenCode v2 is distributed as the npm package @opencode/cli-linux-x64.
+RUN curl -fsSL "https://registry.npmjs.org/@opencode/cli-linux-x64/-/cli-linux-x64-${OPENCODE_VERSION}.tgz" \
+      -o /tmp/opencode.tgz \
+ && tar -xzf /tmp/opencode.tgz -C /tmp \
+ && install -m 0755 /tmp/package/bin/opencode /usr/local/bin/opencode \
+ && rm -rf /tmp/opencode.tgz /tmp/package \
  && opencode --version
 
 WORKDIR /workspace
